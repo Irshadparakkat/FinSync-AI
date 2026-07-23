@@ -1,14 +1,21 @@
 import { Logger, ValidationPipe, VersioningType } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import helmet from 'helmet';
 import { AppModule } from './app.module';
+import { HTTP_BODY } from './common/constants/validation.constants';
 import { APP_CONFIG_KEY, AppConfig } from './config';
 import { ConfigService } from '@nestjs/config';
 
 async function bootstrap(): Promise<void> {
-  const app = await NestFactory.create(AppModule);
+  // Default body parser off so it can be re-registered with a raised limit
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, { bodyParser: false });
   const logger = new Logger('Bootstrap');
+
+  // Base64 avatar payloads exceed the 100kb body-parser default
+  app.useBodyParser('json', { limit: HTTP_BODY.JSON_LIMIT });
+  app.useBodyParser('urlencoded', { extended: true, limit: HTTP_BODY.JSON_LIMIT });
 
   const configService = app.get(ConfigService);
   const { port, apiPrefix, corsOrigins, swaggerEnabled, env } =

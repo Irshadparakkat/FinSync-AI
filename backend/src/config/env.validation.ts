@@ -49,6 +49,22 @@ export class EnvironmentVariables {
   @IsString()
   @IsNotEmpty()
   MONGODB_URI!: string;
+
+  @IsString()
+  @IsNotEmpty()
+  JWT_ACCESS_SECRET!: string;
+
+  @IsString()
+  @IsNotEmpty()
+  JWT_ACCESS_EXPIRES_IN: string = '15m';
+
+  @IsString()
+  @IsNotEmpty()
+  JWT_REFRESH_SECRET!: string;
+
+  @IsString()
+  @IsNotEmpty()
+  JWT_REFRESH_EXPIRES_IN: string = '7d';
 }
 
 export function validateEnv(config: Record<string, unknown>): EnvironmentVariables {

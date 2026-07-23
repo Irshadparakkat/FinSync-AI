@@ -6,6 +6,7 @@ import {
   HealthCheckService,
   MongooseHealthIndicator,
 } from '@nestjs/terminus';
+import { Public } from '../auth/decorators/public.decorator';
 
 /**
  * Liveness/readiness endpoint for load balancers, uptime monitors and
@@ -19,6 +20,7 @@ export class HealthController {
     private readonly mongoose: MongooseHealthIndicator,
   ) {}
 
+  @Public()
   @Get()
   @HealthCheck()
   @ApiOperation({ summary: 'Application and database health' })

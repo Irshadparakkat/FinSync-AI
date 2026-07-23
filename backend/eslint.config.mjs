@@ -25,6 +25,14 @@ export default tseslint.config(
     },
   },
   {
+    // Jest mock assertions (expect(mock.fn).toHaveBeenCalled()) are safe but
+    // trip unbound-method; disable it for test files only.
+    files: ['**/*.spec.ts'],
+    rules: {
+      '@typescript-eslint/unbound-method': 'off',
+    },
+  },
+  {
     rules: {
       '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/no-floating-promises': 'error',
